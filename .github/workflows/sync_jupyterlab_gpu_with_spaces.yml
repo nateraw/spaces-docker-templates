@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/sync-with-huggingface.yml
+      - .github/workflows/sync_jupyterlab_gpu_with_spaces.yml
       - jupyterlab_gpu/**
 
 jobs:

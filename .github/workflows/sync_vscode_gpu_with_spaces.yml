@@ -1,11 +1,11 @@
-name: Sync jupyterlab_cpu with Hugging Face Hub
+name: Sync vscode_gpu with Hugging Face Hub
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/sync-with-huggingface.yml
+      - .github/workflows/sync_vscode_gpu_with_spaces.yml
       - vscode_gpu/**
 
 jobs:
