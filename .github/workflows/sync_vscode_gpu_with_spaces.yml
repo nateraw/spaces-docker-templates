@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Sync with Hugging Face
-      uses: nateraw/huggingface-sync-action@v0.0.4
+      uses: nateraw/huggingface-sync-action@v0.0.5
       with:
         github_repo_id: nateraw/spaces-docker-templates
         huggingface_repo_id: nateraw/vscode-template
