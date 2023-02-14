@@ -16,7 +16,7 @@ jobs:
       uses: nateraw/huggingface-sync-action@v0.0.5
       with:
         github_repo_id: nateraw/spaces-docker-templates
-        huggingface_repo_id: nateraw/jupyterlab-template
+        huggingface_repo_id: DockerTemplates/jupyterlab
         repo_type: space
         space_sdk: docker
         subdirectory: jupyterlab_gpu

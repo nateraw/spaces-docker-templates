@@ -39,7 +39,7 @@ with gr.Blocks(css="style.css") as demo:
         name="JupyterLab",
         description="Spin up a JupyterLab instance with just a couple clicks. This template is great for data exploration, model training, and more. Works on CPU and GPU hardware.",
         author="nateraw",
-        url="https://huggingface.co/spaces/nateraw/jupyterlab-template?duplicate=true",
+        url="https://huggingface.co/spaces/DockerTemplates/jupyterlab?duplicate=true",
         image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jupyter_logo.svg/1767px-Jupyter_logo.svg.png",
         more_info="""
         ### Configuration
@@ -52,7 +52,7 @@ with gr.Blocks(css="style.css") as demo:
         name="VSCode",
         description="Spin up a VSCode instance with just a couple clicks. This template is great for data exploration, model training, and more. Works on CPU and GPU hardware.",
         author="nateraw",
-        url="https://huggingface.co/spaces/nateraw/vscode-template?duplicate=true",
+        url="https://huggingface.co/spaces/DockerTemplates/vscode?duplicate=true",
         image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/1200px-Visual_Studio_Code_1.35_icon.svg.png",
         more_info="""
         ### Configuration
