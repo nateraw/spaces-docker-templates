@@ -1,6 +1,5 @@
-# Spaces Templates
-
 <div align="center">
+  <h1> Spaces Templates </h1>
   <a src="https://img.shields.io/github/stars/nateraw/spaces-docker-templates?style=social" href="https://github.com/nateraw/spaces-docker-templates" target="_blank">
     <img src="https://img.shields.io/github/stars/nateraw/spaces-docker-templates?style=social" alt="GitHub Stars">
   </a>
