@@ -1,0 +1,23 @@
+name: Sync app with Hugging Face Hub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/sync_app_with_spaces.yml
+      - app/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sync with Hugging Face
+      uses: nateraw/huggingface-sync-action@v0.0.5
+      with:
+        github_repo_id: nateraw/spaces-docker-templates
+        huggingface_repo_id: nateraw/docker-templates
+        repo_type: space
+        space_sdk: gradio
+        subdirectory: app
+        hf_token: ${{ secrets.HF_TOKEN }}
