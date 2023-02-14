@@ -1,0 +1,67 @@
+{% extends "page.html" %}
+
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block site %}
+
+<div id="jupyter-main-app" class="container">
+    
+    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Huggig Face Logo">
+    <h4>You can duplicate this Space to run it private.</h4>
+    <br>
+    <a class="duplicate-button" style="display:inline-block" target="_blank" href="https://huggingface.co/spaces/nateraw/jupyterlab-template?duplicate=true">     
+    <img style="margin: 0" src="https://img.shields.io/badge/-Duplicate%20Space-blue?labelColor=white&amp;style=flat&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAP5JREFUOE+lk7FqAkEURY+ltunEgFXS2sZGIbXfEPdLlnxJyDdYB62sbbUKpLbVNhyYFzbrrA74YJlh9r079973psed0cvUD4A+4HoCjsA85X0Dfn/RBLBgBDxnQPfAEJgBY+A9gALA4tcbamSzS4xq4FOQAJgCDwV2CPKV8tZAJcAjMMkUe1vX+U+SMhfAJEHasQIWmXNN3abzDwHUrgcRGmYcgKe0bxrblHEB4E/pndMazNpSZGcsZdBlYJcEL9Afo75molJyM2FxmPgmgPqlWNLGfwZGG6UiyEvLzHYDmoPkDDiNm9JR9uboiONcBXrpY1qmgs21x1QwyZcpvxt9NS09PlsPAAAAAElFTkSuQmCC&amp;logoWidth=14" alt="Duplicate Space"></a>
+    <br>
+    <br>
+    <h4>Token is <span style="color:orange;">huggingface</span></h4>
+  
+    {% if login_available %}
+    {# login_available means password-login is allowed. Show the form. #}
+    <div class="row">
+        <div class="navbar col-sm-8">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="center-nav">
+                        <form action="{{base_url}}login?next={{next}}" method="post" class="navbar-form pull-left">
+                            {{ xsrf_form_html() | safe }}
+                            {% if token_available %}
+                            <label for="password_input"><strong>{% trans %}Token:{% endtrans
+                                    %}</strong></label>
+                            {% else %}
+                            <label for="password_input"><strong>{% trans %}Password:{% endtrans %}</strong></label>
+                            {% endif %}
+                            <input type="password" name="password" id="password_input" class="form-control">
+                            <button type="submit" class="btn btn-default" id="login_submit">{% trans %}Log in{% endtrans
+                                %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>{% trans %}No login available, you shouldn't be seeing this page.{% endtrans %}</p>
+    {% endif %}
+    {% if message %}
+    <div class="row">
+        {% for key in message %}
+        <div class="message {{key}}">
+            {{message[key]}}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if token_available %}
+    {% block token_message %}
+    
+    {% endblock token_message %}
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}

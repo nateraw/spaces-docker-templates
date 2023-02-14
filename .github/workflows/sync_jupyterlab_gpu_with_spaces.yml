@@ -1,0 +1,23 @@
+name: Sync jupyterlab_gpu with Hugging Face Hub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/sync-with-huggingface.yml
+      - jupyterlab_gpu/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sync with Hugging Face
+      uses: nateraw/huggingface-sync-action@v0.0.4
+      with:
+        github_repo_id: nateraw/spaces-docker-templates
+        huggingface_repo_id: nateraw/jupyterlab-template
+        repo_type: space
+        space_sdk: docker
+        subdirectory: jupyterlab_gpu
+        hf_token: ${{ secrets.HF_TOKEN }}
