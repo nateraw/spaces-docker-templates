@@ -1,13 +1,12 @@
 FROM nvidia/cuda:11.3.1-base-ubuntu20.04
 
-# Remove any third-party apt sources to avoid issues with expiring keys.
-RUN rm -f /etc/apt/sources.list.d/*.list
-
 ENV DEBIAN_FRONTEND=noninteractive \
 	TZ=Europe/Paris
 
+# Remove any third-party apt sources to avoid issues with expiring keys.
 # Install some basic utilities
-RUN apt-get update && apt-get install -y \
+RUN rm -f /etc/apt/sources.list.d/*.list && \
+    apt-get update && apt-get install -y \
     curl \
     ca-certificates \
     sudo \
@@ -56,16 +55,15 @@ RUN \
     /var/tmp/*
 COPY root/ /
 
-RUN add-apt-repository ppa:flexiondotorg/nvtop
-RUN apt-get upgrade -y
-RUN apt-get install -y nvtop
+RUN add-apt-repository ppa:flexiondotorg/nvtop && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends nvtop
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
-RUN apt-get install -y nodejs
-RUN npm install -g configurable-http-proxy
+RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g configurable-http-proxy
 
 # Create a working directory
-RUN mkdir -p /app
 WORKDIR /app
 
 # Create a non-root user and switch to it
@@ -98,15 +96,13 @@ USER root
 
 # User Debian packages
 ## Security warning : Potential user code executed as root (build time)
-COPY --chown=root packages.txt /root/packages.txt
-RUN apt-get update && xargs -r -a /root/packages.txt apt-get install -y && rm -rf /var/lib/apt/lists/*
+RUN --mount=target=/root/packages.txt,source=packages.txt \
+    apt-get update && \
+    xargs -r -a /root/packages.txt apt-get install -y --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --chown=root on_startup.sh /root/on_startup.sh
-RUN chmod +x /root/on_startup.sh
-RUN /root/on_startup.sh
-
-# Rerun chmod on home dir in case any new files need permisisons
-RUN chmod -R 777 $HOME
+RUN --mount=target=/root/on_startup.sh,source=on_startup.sh,readwrite \
+	bash /root/on_startup.sh
 
 #######################################
 # End root user section
@@ -114,12 +110,14 @@ RUN chmod -R 777 $HOME
 
 USER user
 
+# Python packages
+RUN --mount=target=requirements.txt,source=requirements.txt \
+    pip install --no-cache-dir --upgrade -r requirements.txt
+
 # Copy the current directory contents into the container at $HOME/app setting the owner to the user
 COPY --chown=user . $HOME/app
 
 RUN chmod +x start_server.sh
-
-RUN pip install --no-cache-dir --upgrade -r $HOME/app/requirements.txt
 
 ENV PYTHONUNBUFFERED=1 \
 	GRADIO_ALLOW_FLAGGING=never \
