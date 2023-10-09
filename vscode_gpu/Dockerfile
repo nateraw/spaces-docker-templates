@@ -1,7 +1,9 @@
+# This Dockerfile was originally based on : https://github.com/nateraw/spaces-docker-templates/blob/main/vscode_gpu/Dockerfile
+# It's been edited to run VSCode as a tunnel instead of a web server
+
 FROM nvidia/cuda:11.3.1-base-ubuntu20.04
 
-ENV DEBIAN_FRONTEND=noninteractive \
-	TZ=Europe/Paris
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Remove any third-party apt sources to avoid issues with expiring keys.
 # Install some basic utilities
@@ -25,43 +27,44 @@ RUN rm -f /etc/apt/sources.list.d/*.list && \
 ARG BUILD_DATE
 ARG VERSION
 ARG CODE_RELEASE
-RUN \
-  echo "**** install openvscode-server runtime dependencies ****" && \
-  apt-get update && \
-  apt-get install -y \
-    jq \
-    libatomic1 \
-    nano \
-    net-tools \
-    netcat && \
-  echo "**** install openvscode-server ****" && \
-  if [ -z ${CODE_RELEASE+x} ]; then \
-    CODE_RELEASE=$(curl -sX GET "https://api.github.com/repos/gitpod-io/openvscode-server/releases/latest" \
-      | awk '/tag_name/{print $4;exit}' FS='[""]' \
-      | sed 's|^openvscode-server-v||'); \
-  fi && \
-  mkdir -p /app/openvscode-server && \
-  curl -o \
-    /tmp/openvscode-server.tar.gz -L \
-    "https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v${CODE_RELEASE}/openvscode-server-v${CODE_RELEASE}-linux-x64.tar.gz" && \
-  tar xf \
-    /tmp/openvscode-server.tar.gz -C \
-    /app/openvscode-server/ --strip-components=1 && \
-  echo "**** clean up ****" && \
-  apt-get clean && \
-  rm -rf \
-    /tmp/* \
-    /var/lib/apt/lists/* \
-    /var/tmp/*
+# RUN \
+#   echo "**** install openvscode-server runtime dependencies ****" && \
+#   apt-get update && \
+#   apt-get install -y \
+#     jq \
+#     libatomic1 \
+#     nano \
+#     net-tools \
+#     netcat && \
+#   echo "**** install openvscode-server ****" && \
+#   if [ -z ${CODE_RELEASE+x} ]; then \
+#     CODE_RELEASE=$(curl -sX GET "https://api.github.com/repos/gitpod-io/openvscode-server/releases/latest" \
+#       | awk '/tag_name/{print $4;exit}' FS='[""]' \
+#       | sed 's|^openvscode-server-v||'); \
+#   fi && \
+#   mkdir -p /app/openvscode-server && \
+#   curl -o \
+#     /tmp/openvscode-server.tar.gz -L \
+#     "https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v${CODE_RELEASE}/openvscode-server-v${CODE_RELEASE}-linux-x64.tar.gz" && \
+#   tar xf \
+#     /tmp/openvscode-server.tar.gz -C \
+#     /app/openvscode-server/ --strip-components=1 && \
+#   echo "**** clean up ****" && \
+#   apt-get clean && \
+#   rm -rf \
+#     /tmp/* \
+#     /var/lib/apt/lists/* \
+#     /var/tmp/*
+
 COPY root/ /
 
 RUN add-apt-repository ppa:flexiondotorg/nvtop && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends nvtop
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g configurable-http-proxy
+# RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash - && \
+#     apt-get install -y nodejs && \
+#     npm install -g configurable-http-proxy
 
 # Create a working directory
 WORKDIR /app
@@ -127,6 +130,7 @@ ENV PYTHONUNBUFFERED=1 \
 	SYSTEM=spaces \
 	SHELL=/bin/bash
 
+# TODO: Not sure we need these ports
 EXPOSE 7860 3000
 
 CMD ["./start_server.sh"]
